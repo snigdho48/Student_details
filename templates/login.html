@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+  Login
+{% endblock %}
+
+
+
+
+{% block content %}
+        <!-- Main content -->
+        <div id="main-content" class="main-content">
+            <div class="container">
+
+                <div class="row">
+
+                    <!--Form Sign In-->
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="signin-container">
+                            <form name="frm-login" method="post">
+                                {% csrf_token %}
+                                <br>
+                                <p class="form-row">
+                                    <label for="username"><span class="requite"></span></label>
+                                    <input type="text" id="username" name="username" placeholder="Email Address/Username/Phone" class="txt-input">
+                                </p>
+                                <br>
+                                <p class="form-row">
+                                    <label for="password"><span class="requite"></span></label>
+                                    <input type="password" id="password" name="password" placeholder="Password" class="pass-input">
+                                </p>
+                                <br>
+                                <p class="form-row wrap-btn">
+                                    <button class="btn btn-submit btn-bold" type="submit">sign in</button>
+                                </p>
+                                <p class="form-row wrap-btn">
+                                    <button class="btn btn-bold ml-0"><a href="{% url 'password_reset_form' %}" style="color:white" >Forgot Password?</a></button>
+
+                                </p>
+                                    {% for message in messages %}
+                                    <div class="form-group" style="border-radius: 4px;background-color: #ff3d23;font-weight:bold;text-align: center; color:white;white-space: nowrap; padding: 6px 12px; font-size: 14px;" >
+                                      {{message}}
+
+                                    </div>
+
+                                    {% endfor %}
+                            </form>
+                        </div>
+                    </div>
+
+                    <!--Go to Register form-->
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="register-in-container">
+                            <div class="intro">
+                                <h4 class="box-title">New Customer?</h4>
+                                <p class="sub-title">Create an account with us and you’ll be able to:</p>
+                                <ul class="lis">
+                                    <li>Check out faster</li>
+                                    <li>Save multiple shipping anddesses</li>
+                                    <li>Access your order history</li>
+                                    <li>Track new orders</li>
+                                    <li>Save items to your Wishlist</li>
+                                </ul>
+                                <a href="{% url 'register' %}" class="btn btn-bold">Create an account</a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

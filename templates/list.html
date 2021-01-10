@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block content %}
+
+
+<div class="w-100">
+<div class="d-flex justify-content-end"><a href="{% url 'logout' %}">logout</a></div>
+
+
+</div>
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Phone</th>
+        <th scope="col">Email</th>
+      <th scope="col">Father</th>
+      <th scope="col">Mother</th>
+        {% if is_Teacher %}
+            <th scope="col">UPDATE</th>
+            <th scope="col">DELETE</th>
+
+        {% endif %}
+
+
+    </tr>
+  </thead>
+  <tbody>
+  {% for st in data %}
+
+    <tr>
+      <th scope="row">{{ st.user.username }}</th>
+      <td>{{ st.phone }}</td>
+        <td>{{ st.user.email }}</td>
+      <td>{{ st.father_name }}</td>
+      <td>{{ st.mother_name }}</td>
+
+    {% if is_Teacher %}
+        <td><button type="Submit" name="Submit"><a href="{%  url 'update' st.id %}">Update</a></button></td>
+         <td><button type="Submit" name="Submit"><a href="{%  url 'delete' st.id %}">Delete</a></button></td>
+
+
+    {% endif %}
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+    <form action="" class="'form-control" method="post">
+    {% csrf_token %}
+
+
+    {{ form.as_p }}
+        {% for foo in messages %}
+        {{ foo }}
+        {% endfor %}
+
+
+        <input type="submit" name="Submit">
+
+
+    </form>
+
+
+
+
+
+
+
+{% endblock %}
