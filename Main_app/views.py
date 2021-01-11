@@ -1,10 +1,10 @@
-from django.contrib import auth, messages
+from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import *
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.contenttypes.models import ContentType
-from .filters import DataFilter
+from .filters import *
 from .forms import *
 
 from .models import *
@@ -91,10 +91,10 @@ def register(request):
                 else:
                     user = User.objects.create_user(username=username, password=password1, email=email)
                     user.save()
-                    phone = Student.objects.create(phone=phone, user=user)
-                    phone.save()
                     my_admin_group = Group.objects.get_or_create(name='Student')
                     my_admin_group[0].user_set.add(user)
+                    phone = Student.objects.create(phone=phone, user=user, group=my_admin_group[0])
+                    phone.save()
                     user.has_perm('Main_app.view_Student')
                     return render(request, 'login.html')
 
@@ -116,15 +116,11 @@ def register(request):
                 else:
                     user = User.objects.create_user(username=username, password=password1, email=email)
                     user.save()
-                    phone = Student.objects.create(phone=phone, user=user)
-                    phone.save()
+
                     my_admin_group = Group.objects.get_or_create(name='Teacher')
                     my_admin_group[0].user_set.add(user)
-                    user.has_perm('Main_app.change_Student')
-
-                    content_type = ContentType.objects.get_for_model(Student)
-                    permission = Permission.objects.get(codename='change_Student', content_type=content_type)
-                    user.user_permissions.add(permission)
+                    phone = Student.objects.create(phone=phone, user=user, group=my_admin_group[0])
+                    phone.save()
                     return render(request, 'login.html')
 
             else:
@@ -139,20 +135,19 @@ def register(request):
 
 
 def show(request):
-    data = Student.objects.all()
-    user = DataFilter(request.GET, queryset=data)
-    data = user.qs
-
-    return render(request, 'list.html', {'user': user, 'data': data})
+    data = Group.objects.get(name='Student')
+    data = data.id
+    user = Student.objects.all().filter(group_id=data)
+    return render(request, 'list.html', {'data': user})
 
 
 @user_passes_test(is_Teacher)
 def show_list(request):
-    data = Student.objects.all()
-    user = DataFilter(request.GET, queryset=data)
-    data = user.qs
+    data = Group.objects.get(name='Student')
+    data = data.id
+    user = Student.objects.all().filter(group_id=data)
     is_Teacher = True
-    return render(request, 'list.html', {'user': user, 'data': data, 'is_Teacher': is_Teacher})
+    return render(request, 'list.html', {'data': user, 'is_Teacher': is_Teacher})
 
 
 @user_passes_test(is_Teacher)
@@ -173,19 +168,23 @@ def update(request, id):
     confirm = False
     form = userform(request.POST or None, request.FILES or None, instance=user1)
     if form.is_valid():
-        user1.father_name = form.cleaned_data['father_name']
-        user1.mother_name = form.cleaned_data['mother_name']
-        user1.phone = form.cleaned_data['phone']
-        form.save()
+        if request.POST['mother_name'] != '':
+            user1.mother_name = form.cleaned_data['mother_name']
+            user1.save(update_fields=["mother_name"])
+
+        if request.POST['father_name'] != '':
+            user1.father_name = form.cleaned_data['father_name']
+            user1.save(update_fields=['father_name'])
+
+        if request.POST['phone'] != '':
+            user1.phone = form.cleaned_data['phone']
+            user1.save(update_fields=['phone'])
+
     form = userform(request.POST or None, request.FILES or None, instance=user)
     if form.is_valid():
-        username = form.cleaned_data['username']
-        if User.objects.filter(username=username).exists():
-            messages.info(request, 'Username Already Taken')
-            user.username = form.cleaned_data['username']
-            user.password = form.cleaned_data['password']
-            form.save()
+        user.username = form.cleaned_data['username']
+        user.save(update_fields=['username'])
 
-            return redirect('show_list')
+        return redirect('show_list')
 
     return render(request, 'update.html', {'form': form, 'confirm': confirm})

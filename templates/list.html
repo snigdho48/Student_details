@@ -39,8 +39,8 @@
       <td>{{ st.mother_name }}</td>
 
     {% if is_Teacher %}
-        <td><button type="Submit" name="Submit"><a href="{%  url 'update' st.id %}">Update</a></button></td>
-         <td><button type="Submit" name="Submit"><a href="{%  url 'delete' st.id %}">Delete</a></button></td>
+        <td><button type="Submit" class="btn btn-primary"name="Submit"><a class="text-white" href="{%  url 'update' st.id %}">Update</a></button></td>
+         <td><button type="Submit" class="btn btn-primary" name="Submit"><a class="text-white" href="{%  url 'delete' st.id %}">Delete</a></button></td>
 
 
     {% endif %}
