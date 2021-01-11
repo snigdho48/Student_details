@@ -68,7 +68,7 @@ def is_Student(user):
     return user.groups.filter(name='Student').exists()
 
 
-@login_required(login_url='login')
+
 def register(request):
     if request.method == 'POST':
         username = request.POST['username']

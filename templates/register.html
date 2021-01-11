@@ -8,8 +8,8 @@
 
 {% block content %}
 
-
     {% include "register_css.html" %}
+
 
 
 <div class="signup-form shadow p-2 mt-2 mb-2">
@@ -24,11 +24,14 @@
 						<span class="fa fa-user"></span>
 					</span>
 				</div>
-                <label for="ControlSelect1">Select A Group</label>
-                        <select class="form-control" name="g_name" id="ControlSelect1">
+                 <div class="form-group new" >
+                        <select class=" " name="g_name">
+                            <option selected>Select A Group</option>
                               <option>Student</option>
                               <option>Teacher</option>
                         </select>
+
+                     </div>
             </div>
         </div>
         <div class="form-group">
@@ -99,4 +102,22 @@
     </form>
 
 </div>
+    <style>
+    .nice-select.open .list
+    {
+        width: 100%;
+    }
+    .new
+    {
+        margin: 0;
+        padding: 0;
+    }
+    .new div{
+        width: 100%;
+    }
+
+    </style>
+
+
+
 {% endblock %}

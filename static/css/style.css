@@ -201,11 +201,7 @@ select option{
     -ms-transform: rotate( -180deg );
     transform: rotate( -180deg );
 }
-.nice-select .current{
-    color: #ffffff;
-    display: inline-block;
-    padding: 14px 0;
-}
+
 .nice-select .list{
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
